@@ -22,3 +22,7 @@ Opinions and additions are welcome
 - goa
 - chennai
 - hyderabad
+- pune
+- manali
+- shimla
+- pondicherry

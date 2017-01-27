@@ -5,14 +5,16 @@ import re
 
 class SouqSpider(scrapy.Spider):
     name = "TripAdvisor"  # Name of the Spider, required value
-    start_urls = ["https://www.tripadvisor.in/Attractions-g317098-Activities-Tiruchirappalli_Tamil_Nadu.html"]  # The starting url, Scrapy will request this URL in parse
-    base_city = "Tiruchirappalli"
+    start_urls = ["https://www.tripadvisor.in/Attractions-g304551-Activities-New_Delhi_National_Capital_Territory_of_Delhi.html"]  # The starting url, Scrapy will request this URL in parse
     # start_urls = ["https://www.tripadvisor.in"]  # The starting url, Scrapy will request this URL in parse
 
     # Entry point for the spider
     def parse(self, response):
         url_scheme = 'https://www.tripadvisor.in'
         # for href in response.css('.poiTitle::attr(href)'):
+
+        self.base_city = "New Delhi"
+        
         for href in response.css('.entry .property_title a::attr(href)'):
             # print "fdbdgkhjgfhjkgbhg-------------------------------######################"
             # print type(href.extract())
@@ -22,9 +24,7 @@ class SouqSpider(scrapy.Spider):
 
     # Method for parsing a product page
     def parse_item(self, response):
-        original_price = -1
-        savings=0
-        discounted = False
+        
         print "heading"
         heading = response.css('#HEADING::text').extract()
         heading = '|'.join(heading)
@@ -167,7 +167,7 @@ class SouqSpider(scrapy.Spider):
             'address_street': street_address, 
             'address_pincode': address_pincode,
             'heading': heading,
-            'base_city': base_city,
+            'base_city': self.base_city,
             'url': response.url
 
             # 'Title': response.css('.product-title h1::text').extract()[0],
