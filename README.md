@@ -1,12 +1,12 @@
 # Automatic Tour Planner
 
-- [ ] Build a scraper
+- [x] Build a scraper
 - [ ] Tour Planning Algorithm
 - [ ] Work on providing preference based on user profile
 - [ ] Integrate with Google Maps
 - [ ] Attain Nirvana
 
-##Build a scraper
+## Build a scraper
 
 List of cities:
 
@@ -26,3 +26,7 @@ Opinions and additions are welcome
 - manali
 - shimla
 - pondicherry
+
+## Data Retrieval Results
+
+dataset link: https://drive.google.com/open?id=0B8S933miGPiSRU00R3FBVXNEczg
