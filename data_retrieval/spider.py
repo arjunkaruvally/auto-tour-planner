@@ -2,25 +2,88 @@
 import json
 import scrapy
 import re
+import time
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.common.keys import Keys
 
 class SouqSpider(scrapy.Spider):
     name = "TripAdvisor"  # Name of the Spider, required value
-    start_urls = ["https://www.tripadvisor.in/Attractions-g304551-Activities-New_Delhi_National_Capital_Territory_of_Delhi.html"]  # The starting url, Scrapy will request this URL in parse
-    # start_urls = ["https://www.tripadvisor.in"]  # The starting url, Scrapy will request this URL in parse
+    start_urls = [
+                # "https://www.tripadvisor.in/Attractions-g304551-Activities-New_Delhi_National_Capital_Territory_of_Delhi.html",
+                "https://www.tripadvisor.in/Attractions-g297628-Activities-Bengaluru_Karnataka.html",
+                "https://www.tripadvisor.in/Attractions-g304554-Activities-Mumbai_Bombay_Maharashtra.html",
+                "https://www.tripadvisor.in/Attractions-g304555-Activities-Jaipur_Jaipur_District_Rajasthan.html",
+                # "https://www.tripadvisor.in/Attractions-g297672-Activities-Udaipur_Rajasthan.html",
+                # "https://www.tripadvisor.in/Attractions-g297683-Activities-Agra_Uttar_Pradesh.html",
+                # "https://www.tripadvisor.in/Attractions-g297633-Activities-Kochi_Cochin_Kerala.html",
+                # "https://www.tripadvisor.in/Attractions-g297604-Activities-Goa.html",
+                # "https://www.tripadvisor.in/Attractions-g304556-Activities-Chennai_Madras_Chennai_District_Tamil_Nadu.html",
+                # "https://www.tripadvisor.in/Attractions-g297586-Activities-Hyderabad_Telangana.html",
+                # "https://www.tripadvisor.in/Attractions-g297654-Activities-Pune_Maharashtra.html",
+                # "https://www.tripadvisor.in/Attractions-g297618-Activities-Manali_Manali_Tehsil_Kullu_District_Himachal_Pradesh.html",
+                # "https://www.tripadvisor.in/Attractions-g304552-Activities-Shimla_Himachal_Pradesh.html",
+                # "https://www.tripadvisor.in/Attractions-g659792-Activities-Pondicherry_Union_Territory_of_Pondicherry.html"
+                ]  # The starting url, Scrapy will request this URL in parse
 
-    # Entry point for the spider
+    # Entry point for the shttps://www.tripadvisor.in/Attractions-g297633-Activities-Kochi_Cochin_Kerala.htmlpider
     def parse(self, response):
         url_scheme = 'https://www.tripadvisor.in'
         # for href in response.css('.poiTitle::attr(href)'):
 
-        self.base_city = "New Delhi"
-        
-        for href in response.css('.entry .property_title a::attr(href)'):
-            # print "fdbdgkhjgfhjkgbhg-------------------------------######################"
-            # print type(href.extract())
-            url = url_scheme+href.extract()
-            yield scrapy.Request(url, callback=self.parse_item)
+        driver = webdriver.Firefox()
+        driver.implicitly_wait(10)
+        driver.get(response.url)
+
+        ctr = 0
+        ctr1 = 0
+
+        while True:
+            try:
+                elem = driver.find_elements_by_css_selector('.entry .property_title a')
+            except StaleElementReferenceException:
+                print "stale element found"
+                break
+            # print elem
+            ctr = ctr+1
+            ctr1 = 0
+
+            for x in elem:
+                ctr1 = ctr1+1
+                try:
+                    url=x.get_attribute('href')
+                    print url
+                    yield scrapy.Request(url, callback=self.parse_item)
+                    time.sleep(1)
+                except StaleElementReferenceException:
+                    print "stale element found"
+                    break
+            try:
+                element = driver.find_element_by_link_text('Next')
+                element.click()
+                time.sleep(5)
+                print "--------------------------------Next page-----------------------",ctr,"--------------",element
+            except Exception:
+                break
+
+        driver.close()
+
+        # while True:
+            # a=None
+
+        ## ordinary implementation
+
+        # for href in response.css('.entry .property_title a::attr(href)'):
+        #     # print "fdbdgkhjgfhjkgbhg-------------------------------######################"
+        #     # print type(href.extract())
+        #     url = url_scheme+href.extract()
+        #     yield scrapy.Request(url, callback=self.parse_item)
+        #     time.sleep(.500)
             # break
+
 
     # Method for parsing a product page
     def parse_item(self, response):
@@ -31,6 +94,17 @@ class SouqSpider(scrapy.Spider):
         heading = heading.replace('\n','')
         heading = heading.replace(',',' ')
         print heading
+
+        print "base city"
+        base_city = response.css('.slim_ranking a::text').extract()
+        if len(base_city) > 0:
+            base_city = ' '.join(base_city)
+            base_city = base_city.replace(',',' ')
+            base_city = base_city.replace('\n','')
+            base_city = base_city[16:]
+        else:
+            base_city = ''
+        print base_city
 
         print "Rating"
         rating = response.css('.wrap .fr::text').extract()[0:5]
@@ -167,7 +241,7 @@ class SouqSpider(scrapy.Spider):
             'address_street': street_address, 
             'address_pincode': address_pincode,
             'heading': heading,
-            'base_city': self.base_city,
+            'base_city': base_city,
             'url': response.url
 
             # 'Title': response.css('.product-title h1::text').extract()[0],
