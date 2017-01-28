@@ -14,9 +14,9 @@ class SouqSpider(scrapy.Spider):
     name = "TripAdvisor"  # Name of the Spider, required value
     start_urls = [
                 # "https://www.tripadvisor.in/Attractions-g304551-Activities-New_Delhi_National_Capital_Territory_of_Delhi.html",
-                "https://www.tripadvisor.in/Attractions-g297628-Activities-Bengaluru_Karnataka.html",
-                "https://www.tripadvisor.in/Attractions-g304554-Activities-Mumbai_Bombay_Maharashtra.html",
-                "https://www.tripadvisor.in/Attractions-g304555-Activities-Jaipur_Jaipur_District_Rajasthan.html",
+                # "https://www.tripadvisor.in/Attractions-g297628-Activities-Bengaluru_Karnataka.html",
+                # "https://www.tripadvisor.in/Attractions-g304554-Activities-Mumbai_Bombay_Maharashtra.html",
+                # "https://www.tripadvisor.in/Attractions-g304555-Activities-Jaipur_Jaipur_District_Rajasthan.html",
                 # "https://www.tripadvisor.in/Attractions-g297672-Activities-Udaipur_Rajasthan.html",
                 # "https://www.tripadvisor.in/Attractions-g297683-Activities-Agra_Uttar_Pradesh.html",
                 # "https://www.tripadvisor.in/Attractions-g297633-Activities-Kochi_Cochin_Kerala.html",
@@ -25,8 +25,8 @@ class SouqSpider(scrapy.Spider):
                 # "https://www.tripadvisor.in/Attractions-g297586-Activities-Hyderabad_Telangana.html",
                 # "https://www.tripadvisor.in/Attractions-g297654-Activities-Pune_Maharashtra.html",
                 # "https://www.tripadvisor.in/Attractions-g297618-Activities-Manali_Manali_Tehsil_Kullu_District_Himachal_Pradesh.html",
-                # "https://www.tripadvisor.in/Attractions-g304552-Activities-Shimla_Himachal_Pradesh.html",
-                # "https://www.tripadvisor.in/Attractions-g659792-Activities-Pondicherry_Union_Territory_of_Pondicherry.html"
+                "https://www.tripadvisor.in/Attractions-g304552-Activities-Shimla_Himachal_Pradesh.html",
+                "https://www.tripadvisor.in/Attractions-g659792-Activities-Pondicherry_Union_Territory_of_Pondicherry.html"
                 ]  # The starting url, Scrapy will request this URL in parse
 
     # Entry point for the shttps://www.tripadvisor.in/Attractions-g297633-Activities-Kochi_Cochin_Kerala.htmlpider
