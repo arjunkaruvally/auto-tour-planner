@@ -22,9 +22,9 @@ class SouqSpider(scrapy.Spider):
                 # "https://www.tripadvisor.in/Attractions-g297633-Activities-Kochi_Cochin_Kerala.html",
                 # "https://www.tripadvisor.in/Attractions-g297604-Activities-Goa.html",
                 # "https://www.tripadvisor.in/Attractions-g304556-Activities-Chennai_Madras_Chennai_District_Tamil_Nadu.html",
-                # "https://www.tripadvisor.in/Attractions-g297586-Activities-Hyderabad_Telangana.html",
-                # "https://www.tripadvisor.in/Attractions-g297654-Activities-Pune_Maharashtra.html",
-                # "https://www.tripadvisor.in/Attractions-g297618-Activities-Manali_Manali_Tehsil_Kullu_District_Himachal_Pradesh.html",
+                "https://www.tripadvisor.in/Attractions-g297586-Activities-Hyderabad_Telangana.html",
+                "https://www.tripadvisor.in/Attractions-g297654-Activities-Pune_Maharashtra.html",
+                "https://www.tripadvisor.in/Attractions-g297618-Activities-Manali_Manali_Tehsil_Kullu_District_Himachal_Pradesh.html",
                 "https://www.tripadvisor.in/Attractions-g304552-Activities-Shimla_Himachal_Pradesh.html",
                 "https://www.tripadvisor.in/Attractions-g659792-Activities-Pondicherry_Union_Territory_of_Pondicherry.html"
                 ]  # The starting url, Scrapy will request this URL in parse
@@ -166,6 +166,17 @@ class SouqSpider(scrapy.Spider):
             ranking = ranking[0][1:]
         print ranking
 
+        print "tags"
+        tags = response.css('.detail a::text').extract()
+        # print duration
+        if len(tags) > 0:
+            tags = '|'.join(tags)
+            tags = tags.replace(',',' ')
+            tags = tags.replace('\n','')
+        else:
+            tags = ''
+        print tags
+
         print "duration"
         duration = response.css('.detail::text').extract()
         # print duration
@@ -242,8 +253,8 @@ class SouqSpider(scrapy.Spider):
             'address_pincode': address_pincode,
             'heading': heading,
             'base_city': base_city,
+            'tags': tags,
             'url': response.url
-
             # 'Title': response.css('.product-title h1::text').extract()[0],
             # 'Category': response.css('.product-title h1+ span a+ a::text').extract()[0],
             # 'CurrentPrice': response.css('.vip-product-info .price::text').extract()[0].replace(u"\xa0", ""),
