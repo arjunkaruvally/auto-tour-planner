@@ -2,6 +2,8 @@
 
 - [x] Build a scraper
 - [ ] Tour Planning Algorithm
+	- [x] Clustering
+	- [ ] Planning
 - [ ] Work on providing preference based on user profile
 - [ ] Integrate with Google Maps
 - [ ] Attain Nirvana

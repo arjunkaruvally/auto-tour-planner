@@ -89,4 +89,5 @@ def get_cluster(city='Kochi (Cochin)', filepath="data_retrieval/data/points_of_i
 
 		ctr += 1
 
+	print df['geolocation']
 	return random_clusters
