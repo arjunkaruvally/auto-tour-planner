@@ -48,8 +48,8 @@ def get_cluster(city='Kochi (Cochin)', filepath="data_retrieval/data/points_of_i
 
 	ctr = 0
 
-	print len(coords['x'])," locations"
-	print number_of_clusters," number of clusters"
+	#print len(coords['x'])," locations"
+	#print number_of_clusters," number of clusters"
 	
 	while ctr<iter_limit:
 		distances = []
@@ -89,5 +89,5 @@ def get_cluster(city='Kochi (Cochin)', filepath="data_retrieval/data/points_of_i
 
 		ctr += 1
 
-	print df['geolocation']
+	#print df['geolocation']
 	return random_clusters
