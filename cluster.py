@@ -1,6 +1,7 @@
 import pandas as pd
 import random
 import math
+import re
 
 def GCD(a, b):
     if b == 0:
@@ -8,22 +9,76 @@ def GCD(a, b):
     else:
         return GCD(b, a % b)
 
-
 def get_distance(p1,p2):
 	dis = math.pow(p1['x']-p2['x'],2) + math.pow(p1['y']-p2['y'],2)
-	return math.sqrt(dis)
+	return math.sqrt(dis)	
 
+def represents_int(s):
+    try: 
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+def parse_duration(x):
+
+	if pd.isnull(x):
+		return 2
+
+	pattern_less = re.compile(r'.*<([0-9]+) .*')
+	pattern_range = re.compile(r'.*([0-9]+)-([0-9]+) .*')
+	pattern_more = re.compile(r'.*More than ([0-9]+) .*')
+
+	try:
+		result = re.search(pattern_less, x)
+		if result!=None:
+			return int(result.group(1))
+
+		result = re.search(pattern_range, x)
+		if result!=None:
+			return (int(result.group(1))+int(result.group(2)))/2
+
+		result = re.search(pattern_more, x)
+		if result!=None:
+			return int(result.group(1))+2
+	except ValueError:
+		pass
+
+	return 2
 
 def get_cluster(city='Kochi (Cochin)', filepath="data_retrieval/data/points_of_interest_clean.csv", cluster_size=10, number_of_clusters=10, restrict_cluster=True, iter_limit=10):
 	
+	#Data Retrival and preprocessing
 	df = pd.read_csv(filepath)
 	df = df[df['base_city']==city]
 	
+	score_list = []
+
+	#Score calculation
+	factors = [3,2,1,-1,-2]
+	for index, row in df.iterrows():
+		rating = row['rating'].split('&')
+		score = 0
+		for x in range(0, len(rating)):
+			if represents_int(rating[x]):
+				score+=factors[x]*int(rating[x])
+		
+		score_list.append(score)
+	df.loc[:,'score'] = pd.Series(score_list, index=df.index)
+
+	#Duration parsing
+	df['duration'] = df['duration'].apply(parse_duration)
+	# print df
+
 	if restrict_cluster:
 		number_of_clusters = int(math.ceil(df.shape[0]/cluster_size))
 
+	df.index = pd.Series(range(0,df.shape[0]))
+
 	coords_str = df['geolocation']
-	coords = {'x': [], 'y': []}
+	# indexes = coords_str.index
+	# print indexes
+	coords = {'x': [], 'y': [], 'i': []}
 	for x in coords_str:
 		location = x.split(',')
 		location[0] = int(float(location[0])*1000000)
@@ -89,5 +144,22 @@ def get_cluster(city='Kochi (Cochin)', filepath="data_retrieval/data/points_of_i
 
 		ctr += 1
 
-	#print df['geolocation']
-	return random_clusters
+	return_value = []
+
+	# print df.index
+	# print df.loc[43,:]
+
+	for x in random_clusters:
+		# print x
+		temp_cluster = {'stats': x, 'data': []}
+		for y in x['coords']:
+			# print y
+			temp = { 
+						'name': df.loc[y,'heading'],
+						'score': df.loc[y,'score'],
+						'duration': df.loc[y,'duration']
+					}
+			temp_cluster['data'].append(temp)
+		return_value.append(temp_cluster)
+
+	return return_value
