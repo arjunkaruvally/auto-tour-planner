@@ -59,9 +59,14 @@ def get_cluster(city='Kochi (Cochin)', filepath="data_retrieval/data/points_of_i
 	for index, row in df.iterrows():
 		rating = row['rating'].split('&')
 		score = 0
+		total = 0
 		for x in range(0, len(rating)):
 			if represents_int(rating[x]):
 				score+=factors[x]*int(rating[x])
+				total+=int(rating[x])
+
+		if total!=0:
+			score=1.0*score/total
 		
 		score_list.append(score)
 	df.loc[:,'score'] = pd.Series(score_list, index=df.index)
@@ -157,7 +162,8 @@ def get_cluster(city='Kochi (Cochin)', filepath="data_retrieval/data/points_of_i
 			temp = { 
 						'name': df.loc[y,'heading'],
 						'score': df.loc[y,'score'],
-						'duration': df.loc[y,'duration']
+						'duration': df.loc[y,'duration'],
+						'geolocation': df.loc[y,'geolocation']
 					}
 			temp_cluster['data'].append(temp)
 		return_value.append(temp_cluster)
