@@ -1,9 +1,9 @@
 # Automatic Tour Planner
 
 - [x] Build a scraper
-- [ ] Tour Planning Algorithm
+- [x] Tour Planning Algorithm
 	- [x] Clustering
-	- [ ] Planning
+	- [x] Planning
 - [ ] Work on providing preference based on user profile
 - [ ] Integrate with Google Maps
 - [ ] Attain Nirvana
