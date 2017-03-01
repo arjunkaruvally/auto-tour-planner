@@ -27,20 +27,19 @@ def get_distances(geolocation):
 	
 	distances = []
 	BASE_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
-	KEY = "&key=AIzaSyAbD3oKpfum9GgraL_FInFseYRLv6AYqb4"
+	KEY = "&key=AIzaSyC5Cd047LqwkP9KVoFKjS-WtRdktusONWI"
 	geolocation =  geolocation.replace(",", "%2C")
 	REQUEST_URL  = BASE_URL + geolocation + "&destinations=" + geolocation + KEY
-	print REQUEST_URL
+	#print REQUEST_URL
 
 	res = requests.get(REQUEST_URL).text
 	res = json.loads(res)
-	for i in res["row"]:
+	for i in res["rows"]:
 		distance_vector = []
 		for element in i["elements"]:
 			distance_vector.append(element["duration"]["value"])
 		
 		distances.append(distance_vector)
-
 	return distances
 	
 def create_cluster_city(city):
@@ -94,14 +93,16 @@ def create_problem_file(city):
 			problem_text_mid += "\t\t(= (duration waypoint" + str(poi_index) + ") " + str(s["duration"]) +")\n"
 			geolocation += str(s["geolocation"]) + "%7C"
 			poi_index += 1
+			if poi_index >8:
+				break
 		problem_text_mids.append(problem_text_mid)
 		geolocation = geolocation[:-3]
 
 		distancematrix = get_distances(geolocation)
 		
-		for i in range(1, poi):
+		for i in range(1, poi_index):
 			for j in range(i+1, poi_index):
-				problem_text_mid +="\t\t(= (drive-time waypoint" + str(i) + " waypoint" + str(j) + ") " +  distancematrix[i][j] + " )\n"
+				problem_text_mid +="\t\t(= (drive-time waypoint" + str(i) + " waypoint" + str(j) + ") " +  distancematrix[i-1][j-1] + " )\n"
 
 		for i in range(1,poi_index):
 			problem_text_mid += "\t\t(not ( visited user1 waypoint" + str(i) + ") )\n"
@@ -127,4 +128,4 @@ def write_file(city):
 		f.write(all_file_data[i])
 		f.close()
 
-write_file(city_list[0])
+#write_file(city_list[0])

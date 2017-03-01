@@ -1,0 +1,65 @@
+{
+   "destination_addresses" : [
+      "Thammanam - Pullepady Rd, Kathrikadavu, Kaloor, Ernakulam, Kerala 682017, India",
+      "Chemmath Rd, Gandhi Nagar, Elamkulam, Ernakulam, Kerala 682020, India"
+   ],
+   "origin_addresses" : [
+      "Thammanam - Pullepady Rd, Kathrikadavu, Kaloor, Ernakulam, Kerala 682017, India",
+      "Chemmath Rd, Gandhi Nagar, Elamkulam, Ernakulam, Kerala 682020, India"
+   ],
+   "rows" : [
+      {
+         "elements" : [
+            {
+               "distance" : {
+                  "text" : "1 ft",
+                  "value" : 0
+               },
+               "duration" : {
+                  "text" : "1 min",
+                  "value" : 0
+               },
+               "status" : "OK"
+            },
+            {
+               "distance" : {
+                  "text" : "1.3 mi",
+                  "value" : 2033
+               },
+               "duration" : {
+                  "text" : "7 mins",
+                  "value" : 399
+               },
+               "status" : "OK"
+            }
+         ]
+      },
+      {
+         "elements" : [
+            {
+               "distance" : {
+                  "text" : "1.0 mi",
+                  "value" : 1687
+               },
+               "duration" : {
+                  "text" : "6 mins",
+                  "value" : 337
+               },
+               "status" : "OK"
+            },
+            {
+               "distance" : {
+                  "text" : "1 ft",
+                  "value" : 0
+               },
+               "duration" : {
+                  "text" : "1 min",
+                  "value" : 0
+               },
+               "status" : "OK"
+            }
+         ]
+      }
+   ],
+   "status" : "OK"
+}
