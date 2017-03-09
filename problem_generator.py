@@ -78,7 +78,7 @@ problem_text_end = """
 
 def create_problem_file(city):
 
-	all_clusters = get_cluster(city)
+	all_clusters = get_cluster(city, cluster_size=8)
 	problem_text_mids = []
 
 	for index in range(0, len(all_clusters)):
