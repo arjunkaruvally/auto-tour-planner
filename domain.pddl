@@ -1,5 +1,5 @@
 (define (domain travel-domain)
-    (:requirements :fluents)
+    (:requirements :fluents )
 
     (:predicates
         (user  ?user)
@@ -15,8 +15,6 @@
         (current-time)
         (start-time)
         (end-time)
-        (d)
-        (drive)
         (duration ?poi)
         (drive-time ?from-poi ?to-poi)
         (walk-time ?from-poi ?to-poi)
@@ -60,23 +58,6 @@
                 ( increase (current-time) (duration ?poi))
             )
     )
-    (:action walk
-        :parameters
-            (?user
-             ?from-poi
-             ?to-poi)
-        :precondition
-            (and
-                (user-at ?user ?from-poi)
-                (can-walk ?from-poi ?to-poi))
-        :effect
-            (and
-                ( user-at ?user ?to-poi)
-                ( not (user-at ?user ?from-poi))
-                ( increase (current-time) (walk-time ?from-poi ?to-poi) )
-                ( increase (drive) (walk-time ?from-poi ?to-poi))
-            )
-    )
     (:action drive
         :parameters
            (?user
@@ -85,13 +66,12 @@
         :precondition
             (and
                 (user-at ?user ?from-poi)
-                (can-drive ?from-poi ?to-poi))
+            )
         :effect
             (and
                 ( user-at ?user ?to-poi)
                 ( not (user-at ?user ?from-poi))
                 ( increase (current-time) (drive-time ?from-poi ?to-poi) )
-                ( increase (drive) (drive-time ?from-poi ?to-poi))
             )
     )
 )
