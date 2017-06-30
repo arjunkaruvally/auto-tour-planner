@@ -1,0 +1,15 @@
+Results for WBFS
+
+A	B 	Cluster1		Time
+1	1	-1.58			0.0001
+1	5	-1.58			0.0001
+2	1	-1.58			16.8
+
+A 	B	Cluster2		Time
+1	1	-4.49			0.0001
+10	9   -10.55			79.76
+
+
+A	B	Cluster3	Time
+1	5	10.729		0.0001
+2	1	10.729		16.75

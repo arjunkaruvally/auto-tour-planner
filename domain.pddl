@@ -6,18 +6,14 @@
         (waypoint ?poi)
         (visited ?user ?poi)
         (user-at ?user ?poi)
-        (can-walk ?from-poi ?to-poi)
-        (can-drive ?from-poi ?to-poi)
     )
     (:functions
         (score ?poi) 
         (total-score)
         (current-time)
-        (start-time)
         (end-time)
         (duration ?poi)
         (drive-time ?from-poi ?to-poi)
-        (walk-time ?from-poi ?to-poi)
     )
 
     (:action visit-penalised

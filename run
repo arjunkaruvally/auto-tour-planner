@@ -1,2 +1,1 @@
-./../Downloads/Metric-FF/ff -o domain.pddl -f problem.pddl -E -g 2 -h 1
-
+./../Downloads/Metric-FF/ff -o domain.pddl -f Ernakulam2_problem.pddl

@@ -30,7 +30,8 @@ def get_distances(geolocation):
 	KEY = "&key=AIzaSyC5Cd047LqwkP9KVoFKjS-WtRdktusONWI"
 	geolocation =  geolocation.replace(",", "%2C")
 	REQUEST_URL  = BASE_URL + geolocation + "&destinations=" + geolocation + KEY
-	#print REQUEST_URL
+	
+	print REQUEST_URL
 
 	res = requests.get(REQUEST_URL).text
 	res = json.loads(res)
@@ -51,14 +52,14 @@ def create_cluster_city(city):
 	f.close()
 
 problem_text_start = """
-(define (problem problem)
+(define (problem problem1)
     (:domain
         travel-domain    
     )
-    (:objects
-        waypoint1 waypoint2 waypoint3
-        user1
-    )
+"""
+
+
+problem_text_mid1 = """
     
     (:init
         (= (total-score) 0)
@@ -85,24 +86,31 @@ def create_problem_file(city):
 		
 		cluster = all_clusters[index]["data"]
 		problem_text_mid = ""
+		object_text_def = """
+		(:objects
+        	user1
+        	waypoint"""
 		geolocation = ""
 		poi_index = 1
 		for s in cluster:
+			object_text_def += " waypoint" + str(poi_index)
 			problem_text_mid += "\t\t(waypoint waypoint" + str(poi_index) + ")\n"
 			problem_text_mid += "\t\t(= (score waypoint" + str(poi_index) + ") " + str(s["score"]) +")\n"
-			problem_text_mid += "\t\t(= (duration waypoint" + str(poi_index) + ") " + str(s["duration"]) +")\n"
+			problem_text_mid += "\t\t(= (duration waypoint" + str(poi_index) + ") " + str(s["duration"]*60) +")\n"
 			geolocation += str(s["geolocation"]) + "%7C"
 			poi_index += 1
 			if poi_index >8:
 				break
-		problem_text_mids.append(problem_text_mid)
+		object_text_def += "\n)"
+		
 		geolocation = geolocation[:-3]
 
 		distancematrix = get_distances(geolocation)
 		
 		for i in range(1, poi_index):
 			for j in range(i+1, poi_index):
-				problem_text_mid +="\t\t(= (drive-time waypoint" + str(i) + " waypoint" + str(j) + ") " +  distancematrix[i-1][j-1] + " )\n"
+				problem_text_mid +="\t\t(= (drive-time waypoint" + str(i) + " waypoint" + str(j) + ") " + str(distancematrix[i-1][j-1])+ " )\n"
+				problem_text_mid +="\t\t(= (drive-time waypoint" + str(j) + " waypoint" + str(i) + ") " + str(distancematrix[i-1][j-1])+ " )\n" 
 
 		for i in range(1,poi_index):
 			problem_text_mid += "\t\t(not ( visited user1 waypoint" + str(i) + ") )\n"
@@ -113,6 +121,8 @@ def create_problem_file(city):
 		for i in range(1,poi_index):
 			problem_text_mid += "\t\t\t(visited user1 waypoint" + str(i) + ")\n"
 
+		problem_text_mids.append(object_text_def + problem_text_mid1 + problem_text_mid)
+		
 	all_file_data = []
 	for i in problem_text_mids:
 		all_file_data.append(problem_text_start + i + problem_text_end)
@@ -128,4 +138,4 @@ def write_file(city):
 		f.write(all_file_data[i])
 		f.close()
 
-#write_file(city_list[0])
+write_file(city_list[0])
