@@ -6,7 +6,6 @@
 	- [x] Planning
 - [ ] Work on providing preference based on user profile
 - [ ] Integrate with Google Maps
-- [ ] Attain Nirvana
 
 ## Build a scraper
 
